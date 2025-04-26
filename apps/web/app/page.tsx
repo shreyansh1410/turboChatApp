@@ -1,34 +1,78 @@
-"use client";
-import { Button } from "@repo/ui/button";
-import { TextInput } from "@repo/ui/text-input";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import Link from "next/link";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function Home() {
-  const router = useRouter();
-  const [roomId, setRoomId] = useState("");
   return (
     <div
       style={{
-        height: "100vh",
-        width: "100vw",
-        backgroundColor: "black",
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
+        background: "#121212",
+        color: "#fff",
       }}
     >
-      <TextInput
-        onChange={(e) => setRoomId(e.target.value)}
-        appName="web"
-        placeholder="Room Name"
-      />
-      <Button
-        onClick={() => router.push(`/room/${roomId}`)}
-        appName="web"
-        children="Join Room"
-      />
+      <main
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "2rem",
+        }}
+      >
+        <h1 style={{ fontSize: "2.2rem", fontWeight: 600, marginBottom: 8 }}>
+          Welcome to <span style={{ color: "#64b5f6" }}>TurboChat</span>
+        </h1>
+        <p
+          style={{
+            maxWidth: 480,
+            textAlign: "center",
+            fontSize: "1.15rem",
+            color: "#cfd8dc",
+          }}
+        >
+          The collaborative chat and room platform for you and your friends.
+          Sign up to create your own rooms and chat in real-time!
+        </p>
+        <div style={{ display: "flex", gap: "1.5rem" }}>
+          <Link
+            href="/auth/signup"
+            style={{
+              background: "#64b5f6",
+              color: "#fff",
+              padding: "0.75rem 2rem",
+              borderRadius: 8,
+              fontWeight: 600,
+              fontSize: "1.1rem",
+              textDecoration: "none",
+              boxShadow: "0 2px 8px rgba(100,181,246,0.15)",
+              transition: "background 0.2s",
+            }}
+          >
+            Sign Up
+          </Link>
+          <Link
+            href="/auth/signin"
+            style={{
+              background: "#222",
+              color: "#fff",
+              padding: "0.75rem 2rem",
+              borderRadius: 8,
+              fontWeight: 600,
+              fontSize: "1.1rem",
+              textDecoration: "none",
+              border: "1px solid #64b5f6",
+              boxShadow: "0 2px 8px rgba(33,33,33,0.08)",
+              transition: "background 0.2s",
+            }}
+          >
+            Sign In
+          </Link>
+        </div>
+      </main>
     </div>
   );
 }
