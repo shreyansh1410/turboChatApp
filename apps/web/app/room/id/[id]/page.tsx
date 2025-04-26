@@ -12,7 +12,7 @@ export default function RoomIdPage({
 }) {
   const { id } = use(params);
   const [room, setRoom] = useState<any>(null);
-  const [chats, setChats] = useState<string[]>([]);
+  const [chats, setChats] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -26,8 +26,9 @@ export default function RoomIdPage({
         ]);
 
         setRoom(roomRes.data.room);
+        // Pass full chat objects (not just message string)
         setChats(
-          chatsRes.data.chats.map((chat: any) => chat.message).reverse()
+          chatsRes.data.chats.reverse() // reverse for latest at bottom
         );
       } catch (err: any) {
         setError(err.response?.data?.msg || "Error loading room");
@@ -50,13 +51,14 @@ export default function RoomIdPage({
         justifyContent: "center",
         height: "100vh",
         background: "#0a0a0a",
+        margin:"auto"
       }}
     >
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          width: 420,
+          width: 700,
           height: 600,
           background: "#18191a",
           borderRadius: 18,

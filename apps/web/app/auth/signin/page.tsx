@@ -20,6 +20,9 @@ export default function SigninPage() {
       const res = await axios.post(`${BACKEND_URL}/auth/signin`, form);
       const data = res.data;
       localStorage.setItem("token", data.token);
+      if (data.user && data.user.id) {
+        localStorage.setItem("userId", data.user.id);
+      }
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
       router.push("/room");
     } catch (err: any) {

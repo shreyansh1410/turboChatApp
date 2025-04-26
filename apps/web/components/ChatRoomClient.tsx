@@ -7,13 +7,16 @@ export function ChatClient({
   messages,
   roomId,
 }: {
-  messages: string[];
+  messages: any[]; // Expecting array of chat objects with userId and message
   roomId: string;
 }) {
   const [chats, setChats] = useState(messages);
   const [newMessage, setNewMessage] = useState("");
   const { socket, loading } = useSocket();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const userId =
+    typeof window !== "undefined" ? localStorage.getItem("userId") : null;
 
   useEffect(() => {
     if (!socket || loading) return;
@@ -43,7 +46,6 @@ export function ChatClient({
   }, [socket, loading, roomId]);
 
   useEffect(() => {
-    // Auto-scroll to bottom when chats change
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chats]);
 
@@ -82,19 +84,52 @@ export function ChatClient({
           Connecting to chat...
         </div>
       )}
-      <div style={{ flex: 1, overflowY: "auto", padding: 16, minHeight: 0, maxHeight: "calc(100vh - 180px)" }}>
-        {chats.map((chat, index) => (
-          <div
-            key={index}
-            style={{
-              marginBottom: 12,
-              color: "#fff",
-              fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-            }}
-          >
-            {chat}
-          </div>
-        ))}
+      <div
+        style={{
+          flex: 1,
+          overflowY: "auto",
+          padding: 16,
+          minHeight: 0,
+          maxHeight: "calc(100vh - 180px)",
+        }}
+      >
+        {chats.map((chat, index) => {
+          const isMine =
+            typeof chat === "object" &&
+            chat.userId &&
+            userId &&
+            chat.userId === userId;
+          const message =
+            typeof chat === "object" && chat.message ? chat.message : chat;
+          return (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                justifyContent: isMine ? "flex-end" : "flex-start",
+                marginBottom: 12,
+              }}
+            >
+              <div
+                style={{
+                  background: isMine ? "#1976d2" : "#23272a",
+                  color: "#fff",
+                  borderRadius: 16,
+                  padding: "0.6rem 1.2rem",
+                  maxWidth: "70%",
+                  fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+                  boxShadow: isMine
+                    ? "0 2px 8px rgba(25, 118, 210, 0.15)"
+                    : "0 2px 8px rgba(0,0,0,0.15)",
+                  alignSelf: isMine ? "flex-start" : "flex-end",
+                  textAlign: "left",
+                }}
+              >
+                {message}
+              </div>
+            </div>
+          );
+        })}
         <div ref={messagesEndRef} />
       </div>
       <div
