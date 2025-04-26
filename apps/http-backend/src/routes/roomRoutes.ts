@@ -8,7 +8,7 @@ import { middleware } from "../middlewares";
 
 const roomRouter = express.Router();
 
-roomRouter.post("/create", roomController);
+roomRouter.post("/create", middleware, roomController);
 roomRouter.get("/:roomSlug", getRoomIdController);
 roomRouter.get("/id/:roomId", getRoomByIdController);
 
